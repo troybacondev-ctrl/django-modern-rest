@@ -50,6 +50,22 @@ class _CorrectToResponseController(Controller[PydanticSerializer]):
         return self.to_response(['a', 'b'])
 
 
+class _CaseInsensitiveHeaderController(Controller[PydanticSerializer]):
+    @validate(
+        ResponseSpec(
+            return_type=list[str],
+            status_code=HTTPStatus.OK,
+            headers={'X-Custom': HeaderSpec()},
+        ),
+    )
+    def get(self) -> HttpResponse:
+        """Return a header using a different but valid casing."""
+        return self.to_response(
+            ['a', 'b'],
+            headers={'x-custom': 'value'},
+        )
+
+
 class _WrongToResponseController(Controller[PydanticSerializer]):
     @validate(
         ResponseSpec(
@@ -153,3 +169,14 @@ def test_to_response_correct_validation(
     assert response.status_code == status_code, response.content
     assert response.headers == headers
     assert json.loads(response.content) == ['a', 'b']
+
+
+def test_to_response_headers_are_case_insensitive(
+    dmr_rf: DMRRequestFactory,
+) -> None:
+    """Ensures HTTP header names are validated without case sensitivity."""
+    request = dmr_rf.get('/whatever/')
+    response = _CaseInsensitiveHeaderController.as_view()(request)
+    assert isinstance(response, HttpResponse)
+    assert response.status_code == HTTPStatus.OK, response.content
+    assert response.headers['X-Custom'] == 'value'

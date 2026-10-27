@@ -168,3 +168,7 @@ Next steps:
 ## Credits
 
 This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [e1fcf312d7f715323dcff0d376a40b7e3b47f9b7](https://github.com/wemake-services/wemake-python-package/tree/e1fcf312d7f715323dcff0d376a40b7e3b47f9b7). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/e1fcf312d7f715323dcff0d376a40b7e3b47f9b7...master) since then.
+
+## Fork contribution notes
+
+This repository is a fork of [wemake-services/django-modern-rest](https://github.com/wemake-services/django-modern-rest). The `troy/api-improvements` branch starts from upstream commit `d5763279b92c8e0b2cc9cac80652a198c9edf1e9` and contains a focused regression test covering case-insensitive HTTP response-header validation. The test reflects practical REST API integration work with Django and typed response contracts; the upstream project remains the original source.
